@@ -1,0 +1,14 @@
+prefix=/local64/bin-video/ffmpegSHARED
+exec_prefix=${prefix}
+libdir=/local64/bin-video/ffmpegSHARED/lib
+includedir=/local64/bin-video/ffmpegSHARED/include
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 59.0.100
+Requires: 
+Requires.private: libswresample >= 4.0.100, libavutil >= 57.0.100
+Conflicts:
+Libs: -L${libdir}  -lavcodec 
+Libs.private: -LC:/work/mabs/local64/lib -lvpx -lm -lm -lpthread -LC:/work/mabs/local64/lib -lvpx -lm -lm -lpthread -LC:/work/mabs/local64/lib -lvpx -lm -lm -lpthread -LC:/work/mabs/local64/lib -lvpx -lm -lm -lpthread -LC:/work/mabs/local64/lib -lwebpmux -lm -lwebp -lm -pthread -lm -llzma -LC:/work/mabs/local64/lib -ldav1d -lopencore-amrwb -lsnappy -lstdc++ -LC:/work/mabs/msys64/mingw64/lib -lz -LC:/work/mabs/local64/lib -laom -lm -lpthread -lgsm -lmp3lame -lm -lopencore-amrnb -LC:/work/mabs/msys64/mingw64/lib -lopenjp2 -lm -LC:/work/mabs/local64/lib -lopus -lm -LC:/work/mabs/local64/lib -lm -lshine -LC:/work/mabs/msys64/mingw64/lib -lspeex -lm -LC:/work/mabs/local64/lib -lSvtAv1Enc -ltheoraenc -ltheoradec -logg -ltwolame -lvo-amrwbenc -LC:/work/mabs/msys64/mingw64/lib -lvorbis -lm -LC:/work/mabs/msys64/mingw64/lib -logg -LC:/work/mabs/msys64/mingw64/lib -lvorbisenc -LC:/work/mabs/msys64/mingw64/lib -lvorbis -lm -LC:/work/mabs/msys64/mingw64/lib -logg -LC:/work/mabs/local64/lib -lwebp -lm -LC:/work/mabs/local64/lib -lx264 -LC:/work/mabs/local64/lib -lx265 -lstdc++ -lgcc -lgcc -lxvidcore -lole32 -luser32 -ldl -LC:/work/mabs/local64/lib -lmfx -lstdc++ -lole32 -luuid
+Cflags: -I${includedir}
