@@ -1,2 +1,2 @@
 # cmake_sandbox
-Testing various aspects of cmake
+Testing various aspects and some templates for cmake
