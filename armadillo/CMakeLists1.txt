@@ -1,0 +1,38 @@
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
+
+project(cmake_tester CXX)
+
+if (DEFINED CACHE{CMAKE_BUILD_CONFIG})
+    set(config ${CMAKE_BUILD_CONFIG})
+    unset(CMAKE_BUILD_CONFIG CACHE)
+    message("variable is in cache")
+else()
+    set(config false)
+    message("variable is not in cache")
+endif()
+    
+message("Module Config is " ${config})
+
+set(project "base_name")    
+
+ 
+if (${config})
+    message("configure app")
+    add_executable(${project} main.cpp)
+else()
+    message("configure libs")
+    include(ExternalProject)
+    ExternalProject_Add(${project}
+        PREFIX                  ${PROJECT_BINARY_DIR}/${project}
+        SOURCE_DIR              ${CMAKE_BINARY_DIR}
+        #INSTALL_DIR             install
+        #CMAKE_ARGS              -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_BINARY_DIR}/base/${project}/install
+        CMAKE_CACHE_ARGS        -DCMAKE_BUILD_CONFIG:BOOL=TRUE
+        UPDATE_DISCONNECTED     True
+        UPDATE_COMMAND          ""
+        #CONFIGURE_COMMAND      ""
+        #BUILD_COMMAND          ""
+        INSTALL_COMMAND        ""
+        #TEST_COMMAND           ""
+    )
+endif()
