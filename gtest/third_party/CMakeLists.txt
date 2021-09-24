@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.18)
 project(my_project-superbuid)
 
 # GoogleTest requires at least C++11
@@ -17,11 +17,8 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 ]]
 
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-
-
 include(ExternalProject)
+
 
 ExternalProject_Add(googletest
     PREFIX              ${PROJECT_BINARY_DIR}/googletest
@@ -31,13 +28,15 @@ ExternalProject_Add(googletest
     GIT_PROGRESS        TRUE
     CMAKE_ARGS          -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/googletest/install -Dgtest_force_shared_crt=OFF
     BUILD_ALWAYS        TRUE
-    UPDATE_DISCONNECTED TRUE
+    #UPDATE_DISCONNECTED TRUE
     )
 
 
 ExternalProject_Add(my_project
     PREFIX          ${PROJECT_BINARY_DIR}/my_project
+    DEPENDS         googletest
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/..
-    CMAKE_ARGS      -DLIBS_PATH=${PROJECT_BINARY_DIR}/googletest/install
+    CMAKE_ARGS      -DLIBS_PATH=${PROJECT_BINARY_DIR}/googletest/install -DBUILD_TESTS=ON
     BUILD_ALWAYS    TRUE
-    )
+    INSTALL_COMMAND cmake -E echo "Skipping install step."
+)
