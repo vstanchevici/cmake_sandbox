@@ -38,5 +38,5 @@ ExternalProject_Add(my_project
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/..
     CMAKE_ARGS      -DLIBS_PATH=${PROJECT_BINARY_DIR}/googletest/install -DBUILD_TESTS=ON
     BUILD_ALWAYS    TRUE
-    INSTALL_COMMAND cmake -E echo "Skipping install step."
+    INSTALL_COMMAND "" #cmake -E echo "Skipping install step."
 )
