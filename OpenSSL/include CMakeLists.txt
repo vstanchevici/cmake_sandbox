@@ -1,0 +1,81 @@
+# CMakeList.txt : CMake project for sync-server, include source and define
+# project specific logic here.
+#
+cmake_minimum_required (VERSION 3.10)
+
+project(sync-server)
+
+# Set standard
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS ON)
+
+file(
+    GLOB_RECURSE SOURCE_FILES ${SOURCE_FILES}
+    LIST_DIRECTORIES false
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/*.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/*.hpp"
+)
+
+foreach(_file IN ITEMS ${SOURCE_FILES})
+    get_filename_component(_file_path "${_file}" PATH)
+    file(RELATIVE_PATH _libs_path_rel "${CMAKE_CURRENT_SOURCE_DIR}" "${_file_path}")
+    string(REPLACE "/" "\\" _group_path "${_libs_path_rel}")
+    source_group("${_group_path}" FILES "${_file}")
+endforeach()
+
+add_executable(sync-server ${SOURCE_FILES})
+
+target_include_directories(sync-server PRIVATE ./source/)
+target_compile_definitions(sync-server PRIVATE -DHAS_SSL_SUPPORT)
+
+if (DEFINED VERSION_MAJOR)
+    target_compile_definitions(sync-server PRIVATE -DVERSION_MAJOR=${VERSION_MAJOR})
+else()
+    target_compile_definitions(sync-server PRIVATE -DVERSION_MAJOR=1)
+endif()
+
+if (DEFINED VERSION_MINOR)
+    target_compile_definitions(sync-server PRIVATE -DVERSION_MINOR=${VERSION_MINOR})
+else()
+    target_compile_definitions(sync-server PRIVATE -DVERSION_MINOR=0)
+endif()
+
+if (DEFINED VERSION_REVISION)
+    target_compile_definitions(sync-server PRIVATE -DVERSION_REVISION=${VERSION_REVISION})
+else()
+    target_compile_definitions(sync-server PRIVATE -DVERSION_REVISION=0)
+endif()
+
+
+#include path
+if (DEFINED LIBRARIES_INSTALL_PREFIX)
+    list(APPEND CMAKE_PREFIX_PATH ${LIBRARIES_INSTALL_PREFIX})
+    set(OPENSSL_ROOT_DIR ${LIBRARIES_INSTALL_PREFIX}/OpenSSL) #is a temp solutin, I don't like
+endif()
+
+#include boost
+set(Boost_USE_STATIC_RUNTIME ON)
+find_package(Boost COMPONENTS system thread coroutine context REQUIRED)
+target_link_libraries(sync-server PRIVATE ${Boost_LIBRARIES})
+target_include_directories(sync-server PRIVATE ${Boost_INCLUDE_DIR})
+
+#include opensll
+set(OPENSSL_USE_STATIC_LIBS ON)
+#set(OPENSSL_MSVC_STATIC_RT ON)
+find_package(OpenSSL REQUIRED)
+target_link_libraries(sync-server PRIVATE ${OPENSSL_LIBRARIES})
+target_include_directories(sync-server PRIVATE ${OPENSSL_INCLUDE_DIR})
+
+if(UNIX)
+    target_link_libraries(sync-server PRIVATE ${CMAKE_DL_LIBS})
+endif()
+
+if(WIN32)
+    target_link_libraries(sync-server PRIVATE ws2_32 wsock32 crypt32)
+    target_compile_definitions(sync-server PRIVATE -D_WIN32_WINDOWS)
+endif()
+
+install(TARGETS sync-server DESTINATION ./)
