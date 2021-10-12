@@ -31,5 +31,18 @@ endif()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 find_package(libuv REQUIRED)
-target_include_directories(libuv_test PRIVATE ${LIBUV_INCLUDE_DIR})
-target_link_libraries(libuv_test PRIVATE ${LIBUV_LIBRARY})
+target_include_directories(libuv_test PRIVATE ${LibUV_INCLUDE_DIRS})
+target_link_libraries(libuv_test PRIVATE ${LibUV_LIBRARIES})
+
+if(WIN32)
+  target_link_libraries(libuv_test PRIVATE Userenv Iphlpapi ws2_32)
+endif()
+
+message(STATUS "LibUV_FOUND: ${LibUV_FOUND}")
+message(STATUS "LibUV_INCLUDE_DIRS: ${LibUV_INCLUDE_DIRS}")
+message(STATUS "LibUV_LIBRARIES: ${LibUV_LIBRARIES}")
+message(STATUS "LibUV_VERSION: ${LibUV_VERSION}")
+message(STATUS "LibUV_VERSION_MAJOR: ${LibUV_VERSION_MAJOR}")
+message(STATUS "LibUV_VERSION_MINOR: ${LibUV_VERSION_MINOR}")
+message(STATUS "LibUV_VERSION_PATCH: ${LibUV_VERSION_PATCH}")
+  
