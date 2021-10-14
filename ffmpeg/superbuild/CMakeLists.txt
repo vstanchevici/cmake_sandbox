@@ -81,24 +81,25 @@ if(CMAKE_CXX_COMPILER_LOADED)
     message(STATUS "CMAKE_RANLIB: ${CMAKE_RANLIB}")
 endif()
 
-#set(ENV{PATH} "C:\\Program Files\\Git\\bin;$ENV{PATH}")
+#set(ENV{PATH} "C:\\msys64\\usr\\bin;$ENV{PATH}")
 
 message(STATUS "PATH: $ENV{PATH}")
 
 #https://stackoverflow.com/questions/63059904/setting-environment-variables-to-externalproject-add-context
-
+#./configure --toolchain=msvc --enable-debug --arch=x86 --extra-cflags="-MTd" extra-cxxflags="-MTd" --extra-ldflags="-nodefaultlib:LIBCMT"
+#./configure --prefix=ffmpeg-bin --enable-gpl --enable-nonfree --enable-libass --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libxvid --enable-shared --disable-static --disable-optimizations --disable-mmx --disable-stripping
 ExternalProject_Add(ffmpeg
     PREFIX                  ${LIBRARIES_PREFIX}/ffmpeg
     GIT_REPOSITORY          https://git.ffmpeg.org/ffmpeg.git
     GIT_TAG                 n4.4
     GIT_SHALLOW             1
     BUILD_IN_SOURCE         ON
-    CONFIGURE_COMMAND       "C:\\Program Files\\Git\\bin\\bash.exe" ./configure --toolchain=msvc --target-os=win64 --arch=x86_64 --enable-w32threads --disable-shared --enable-static --disable-doc --disable-programs --prefix=${LIBRARIES_INSTALL_PREFIX}/ffmpeg
-    BUILD_COMMAND           make.exe
+    CONFIGURE_COMMAND       bash ./configure --toolchain=msvc --target-os=win64 --arch=x86_64 --enable-w32threads --disable-shared --enable-static --disable-doc --disable-programs --prefix=${LIBRARIES_INSTALL_PREFIX}/ffmpeg
+    BUILD_COMMAND           make -j ${CPU_COUNT}
     UPDATE_DISCONNECTED     TRUE
     UPDATE_COMMAND          ""
     BUILD_ALWAYS            FALSE
-    INSTALL_COMMAND         make.exe install
+    INSTALL_COMMAND         make install
 )
 
 ExternalProject_Add(ffmpeg_test
