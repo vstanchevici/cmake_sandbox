@@ -2,8 +2,6 @@
  * captures from dshow input and writes to out.webm
  * captures just the video
  *
- * compile using
- * > gcc dshow_capture_video.c -I"..\ffmpeg-dev\include" -L"..\ffmpeg-shared" -o dshow_capture_video -lavcodec-55 -lavdevice-55 -lavfilter-4 -lavformat-55 -lavutil-52 -Wall
  */
 #include <libavcodec/avcodec.h>
 #include <libavdevice/avdevice.h>
@@ -80,7 +78,9 @@ int main(int argc, char **argv)
   av_dict_set(&inOptions, "r", "25", 0);
 
   // input device, since we selected dshow
-  ret = avformat_open_input(&pFormatCtxInCam, "video=A4TECH USB2.0 PC Camera", inFrmt, &inOptions);
+  //home = "video=A4TECH USB2.0 PC Camera"
+  //office = "video=A4tech FHD 1080P PC Camera"
+  ret = avformat_open_input(&pFormatCtxInCam, "video=A4tech FHD 1080P PC Camera", inFrmt, &inOptions);
 
   // lookup infor
   if(avformat_find_stream_info(pFormatCtxInCam,NULL)<0)
@@ -208,8 +208,8 @@ int main(int argc, char **argv)
       pCodecCtxInCam->sample_aspect_ratio.num, pCodecCtxInCam->sample_aspect_ratio.den);
 
   // input source buffer
-  ret = avfilter_graph_create_filter(&buffersrc_ctx_cam, buffersrc_cam, "in",
-      args_cam, NULL, filter_graph);
+  ret = avfilter_graph_create_filter(&buffersrc_ctx_cam, buffersrc_cam, "in", args_cam, NULL, filter_graph);
+
   if (ret < 0) {
     av_log(NULL, AV_LOG_ERROR, "Cannot create buffer source\n");
     exit(ret);
