@@ -95,36 +95,49 @@ ExternalProject_Add(depot_tools
 )
 ExternalProject_Get_property(depot_tools SOURCE_DIR)
 set(DEPOT_TOOLS_DIR ${SOURCE_DIR})
-message(STATUS "DEPOT_TOOLS_DIR: ${DEPOT_TOOLS_DIR}")
 
-#read more about depol tools here:
+#read more about webrtc here:
 #   https://webrtc.github.io/webrtc-org/native-code/development/
 #   https://gist.github.com/jasonrudolph/1810768
+# https://support.microsoft.com/en-us/topic/018534c6-2c0f-9bee-44d1-b1559a76d6d2
+# https://stackoverflow.com/questions/11691454/running-variable-string-as-command-in-batch-scripting
+set(WEBRTC_DIR ${LIBRARIES_PREFIX}/webrtc)
 
-file(WRITE "${PROJECT_BINARY_DIR}/download_webrtc.bat"
+file(WRITE "${WEBRTC_DIR}/download_webrtc.bat"
         "set PATH=${DEPOT_TOOLS_DIR};%PATH%
+        cd webrtc
         fetch.bat --nohooks webrtc
         gclient.bat sync
+        git checkout branch-heads/m79
+        gclient.bat sync --with_branch_heads --with_tags
         ")
-file(WRITE "${PROJECT_BINARY_DIR}/configure_webrtc.bat"
+        
+#python.bat -m pip install pywin32        
+file(WRITE "${WEBRTC_DIR}/configure_webrtc.bat"
         "set PATH=${DEPOT_TOOLS_DIR};%PATH%
-        cd ../src/
-        pwd
-        gn gen out/Release-x86 --args=\"is_debug=false use_rtti=true is_clang=false rtc_build_tools=false rtc_include_tests=false rtc_build_examples=false\"
+        cd src
+        gn gen out/Release-x86 --args=\"enable_iterator_debugging=false is_debug=false use_rtti=true is_clang=false rtc_build_tools=false rtc_include_tests=false rtc_build_examples=false\"
         ")
-       
+
+file(WRITE "${WEBRTC_DIR}/compile_webrtc.bat"
+        "set PATH=${DEPOT_TOOLS_DIR};%PATH%
+        cd src
+        ninja -C out/Release-x86
+        ")        
+        
 ExternalProject_Add(webrtc
-    PREFIX                  ${LIBRARIES_PREFIX}/webrtc
+    PREFIX                  ${WEBRTC_DIR}
     DEPENDS                 depot_tools
-    DOWNLOAD_COMMAND        "${PROJECT_BINARY_DIR}/download_webrtc.bat"
+    DOWNLOAD_COMMAND        "${WEBRTC_DIR}/download_webrtc.bat"
     BUILD_IN_SOURCE         ON
     UPDATE_DISCONNECTED     TRUE
     UPDATE_COMMAND          ""
-    CONFIGURE_COMMAND       "${PROJECT_BINARY_DIR}/configure_webrtc.bat"
-    BUILD_COMMAND           ""
+    CONFIGURE_COMMAND       "${WEBRTC_DIR}/configure_webrtc.bat"
+    BUILD_COMMAND           "${WEBRTC_DIR}/compile_webrtc.bat"
     INSTALL_COMMAND         ""
 )
 
+        
 ExternalProject_Add(webrtc_test
     PREFIX              ${LIBRARIES_PREFIX}/webrtc_test
     DEPENDS             webrtc
