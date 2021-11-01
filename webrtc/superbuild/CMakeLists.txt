@@ -103,27 +103,45 @@ set(DEPOT_TOOLS_DIR ${SOURCE_DIR})
 # https://stackoverflow.com/questions/11691454/running-variable-string-as-command-in-batch-scripting
 set(WEBRTC_DIR ${LIBRARIES_PREFIX}/webrtc)
 
+#https://stackoverflow.com/questions/4036754/why-does-only-the-first-line-of-this-windows-batch-file-execute-but-all-three-li
+#[[
+Bat file contents (if you want to stop batch when one of cmds errors)
+
+cmd1 && ^
+cmd2 && ^
+cmd3 && ^
+cmd4
+
+Bat file contents (if you want to continue batch when one of cmds errors)
+
+cmd1 & ^
+cmd2 & ^
+cmd3 & ^
+cmd4
+]]
+
 file(WRITE "${WEBRTC_DIR}/download_webrtc.bat"
-        "set PATH=${DEPOT_TOOLS_DIR};%PATH%
-        cd webrtc
-        fetch.bat --nohooks webrtc
-        gclient.bat sync
-        git checkout branch-heads/m79
-        gclient.bat sync --with_branch_heads --with_tags
-        ")
+"set PATH=${DEPOT_TOOLS_DIR};%PATH%
+cd webrtc
+fetch.bat --nohooks webrtc
+cd src
+git checkout branch-heads/m79
+gclient.bat sync
+python.bat -m pip install pywin32
+")
         
-#python.bat -m pip install pywin32        
+
 file(WRITE "${WEBRTC_DIR}/configure_webrtc.bat"
-        "set PATH=${DEPOT_TOOLS_DIR};%PATH%
-        cd src
-        gn gen out/Release-x86 --args=\"enable_iterator_debugging=false is_debug=false use_rtti=true is_clang=false rtc_build_tools=false rtc_include_tests=false rtc_build_examples=false\"
-        ")
+"set PATH=${DEPOT_TOOLS_DIR};%PATH%
+cd src
+gn gen out/Release-x86 --args=\"enable_iterator_debugging=false is_debug=false use_rtti=true is_clang=false rtc_build_tools=false rtc_include_tests=false rtc_build_examples=false\"
+")
 
 file(WRITE "${WEBRTC_DIR}/compile_webrtc.bat"
-        "set PATH=${DEPOT_TOOLS_DIR};%PATH%
-        cd src
-        ninja -C out/Release-x86
-        ")        
+"set PATH=${DEPOT_TOOLS_DIR};%PATH%
+cd src
+ninja -C out/Release-x86
+")        
         
 ExternalProject_Add(webrtc
     PREFIX                  ${WEBRTC_DIR}
