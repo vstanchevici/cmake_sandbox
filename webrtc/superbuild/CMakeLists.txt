@@ -125,7 +125,7 @@ file(WRITE "${WEBRTC_DIR}/download_webrtc.bat"
 "set PATH=${DEPOT_TOOLS_DIR};%PATH%
 cd webrtc
 fetch.bat --nohooks webrtc
-cd src
+cd src && ^
 git checkout branch-heads/m79 && ^
 gclient.bat sync && ^
 python.bat -m pip install pywin32
