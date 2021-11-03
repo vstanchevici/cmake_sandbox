@@ -103,6 +103,7 @@ set(DEPOT_TOOLS_DIR ${SOURCE_DIR})
 # https://stackoverflow.com/questions/11691454/running-variable-string-as-command-in-batch-scripting
 set(WEBRTC_DIR ${LIBRARIES_PREFIX}/webrtc)
 
+#https://stackoverflow.com/questions/55708589/how-to-pass-an-environment-variable-to-externalproject-add-configure-command
 #https://stackoverflow.com/questions/4036754/why-does-only-the-first-line-of-this-windows-batch-file-execute-but-all-three-li
 #[[
 Bat file contents (if you want to stop batch when one of cmds errors)
@@ -125,9 +126,10 @@ file(WRITE "${WEBRTC_DIR}/download_webrtc.bat"
 "set PATH=${DEPOT_TOOLS_DIR};%PATH%
 cd webrtc
 fetch.bat --nohooks webrtc
-cd src && ^
-git checkout branch-heads/m79 && ^
-gclient.bat sync && ^
+cd src
+gclient.bat sync
+git checkout branch-heads/m79
+gclient.bat sync
 python.bat -m pip install pywin32
 ")
         
