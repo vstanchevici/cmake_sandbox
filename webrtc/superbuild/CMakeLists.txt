@@ -85,7 +85,7 @@ endif()
 #   https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html
 ExternalProject_Add(depot_tools
     PREFIX                  ${LIBRARIES_PREFIX}/depot_tools
-    GIT_REPOSITORY          "https://chromium.googlesource.com/chromium/tools/depot_tools.git"    
+    GIT_REPOSITORY          https://chromium.googlesource.com/chromium/tools/depot_tools.git
     GIT_TAG                 main
     UPDATE_DISCONNECTED     TRUE
     UPDATE_COMMAND          ""
@@ -121,40 +121,42 @@ cmd3 & ^
 cmd4
 ]]
 
-
+#https://stackoverflow.com/questions/26452225/how-to-reuse-extracted-source-with-cmakes-externalproject-add
 file(WRITE "${WEBRTC_DIR}/download_webrtc.bat"
 "set PATH=${DEPOT_TOOLS_DIR};%PATH%
 cd webrtc
-fetch.bat --nohooks webrtc
-cd src
-gclient.bat sync
-git checkout branch-heads/m79
-gclient.bat sync
-python.bat -m pip install pywin32
+if not exist .gclient (
+    call fetch.bat --nohooks webrtc
+    cd src
+    call gclient.bat sync
+    call git checkout branch-heads/m79
+    call gclient.bat sync
+    call python.bat -m pip install pywin32
+)
 ")
-        
+
 
 file(WRITE "${WEBRTC_DIR}/configure_webrtc.bat"
 "set PATH=${DEPOT_TOOLS_DIR};%PATH%
 cd src
-gn gen out/Release-x86 --args=\"enable_iterator_debugging=false is_debug=false use_rtti=true is_clang=false rtc_build_tools=false rtc_include_tests=false rtc_build_examples=false\"
+gn gen out/%1 --args=\"enable_iterator_debugging=false is_debug=false use_rtti=true is_clang=false rtc_build_tools=false rtc_include_tests=false rtc_build_examples=false\"
 ")
 
 file(WRITE "${WEBRTC_DIR}/compile_webrtc.bat"
 "set PATH=${DEPOT_TOOLS_DIR};%PATH%
 cd src
-ninja -C out/Release-x86
+ninja -C out/%1
 ")        
         
 ExternalProject_Add(webrtc
     PREFIX                  ${WEBRTC_DIR}
     DEPENDS                 depot_tools
-    DOWNLOAD_COMMAND        "${WEBRTC_DIR}/download_webrtc.bat"
+    DOWNLOAD_COMMAND        ${WEBRTC_DIR}/download_webrtc.bat
     BUILD_IN_SOURCE         ON
     UPDATE_DISCONNECTED     TRUE
     UPDATE_COMMAND          ""
-    CONFIGURE_COMMAND       "${WEBRTC_DIR}/configure_webrtc.bat"
-    BUILD_COMMAND           "${WEBRTC_DIR}/compile_webrtc.bat"
+    CONFIGURE_COMMAND       ${WEBRTC_DIR}/configure_webrtc.bat $<IF:$<CONFIG:Debug>,debug,release>
+    BUILD_COMMAND           ${WEBRTC_DIR}/compile_webrtc.bat $<IF:$<CONFIG:Debug>,debug,release>
     INSTALL_COMMAND         ""
 )
 
