@@ -99,27 +99,10 @@ set(DEPOT_TOOLS_DIR ${SOURCE_DIR})
 #read more about webrtc here:
 #   https://webrtc.github.io/webrtc-org/native-code/development/
 #   https://gist.github.com/jasonrudolph/1810768
-# https://support.microsoft.com/en-us/topic/018534c6-2c0f-9bee-44d1-b1559a76d6d2
-# https://stackoverflow.com/questions/11691454/running-variable-string-as-command-in-batch-scripting
 set(WEBRTC_DIR ${LIBRARIES_PREFIX}/webrtc)
 
 #https://stackoverflow.com/questions/55708589/how-to-pass-an-environment-variable-to-externalproject-add-configure-command
 #https://stackoverflow.com/questions/4036754/why-does-only-the-first-line-of-this-windows-batch-file-execute-but-all-three-li
-#[[
-Bat file contents (if you want to stop batch when one of cmds errors)
-
-cmd1 && ^
-cmd2 && ^
-cmd3 && ^
-cmd4
-
-Bat file contents (if you want to continue batch when one of cmds errors)
-
-cmd1 & ^
-cmd2 & ^
-cmd3 & ^
-cmd4
-]]
 
 #https://stackoverflow.com/questions/26452225/how-to-reuse-extracted-source-with-cmakes-externalproject-add
 file(WRITE "${WEBRTC_DIR}/download_webrtc.bat"
