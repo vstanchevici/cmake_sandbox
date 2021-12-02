@@ -37,6 +37,7 @@ ExternalProject_Add(libuv
     PREFIX                  ${LIBRARIES_PREFIX}/libuv
     GIT_REPOSITORY          https://github.com/libuv/libuv.git
     GIT_TAG                 v1.42.0
+    GIT_SHALLOW             ON
     CMAKE_ARGS              -DCMAKE_INSTALL_PREFIX:PATH=${LIBRARIES_INSTALL_PREFIX}/libuv
     CMAKE_CACHE_ARGS        -DLIBUV_BUILD_BENCH:BOOL=OFF -DLIBUV_BUILD_TESTS:BOOL=OFF
     UPDATE_DISCONNECTED     TRUE
@@ -48,12 +49,27 @@ ExternalProject_Add(libuv
     #TEST_COMMAND           ""
 )
 
+ExternalProject_Add(http-parser
+    PREFIX                  ${LIBRARIES_PREFIX}/http-parser
+    GIT_REPOSITORY          https://github.com/nodejs/http-parser.git
+    GIT_TAG                 main
+    GIT_SHALLOW             ON
+    UPDATE_DISCONNECTED     TRUE
+    UPDATE_COMMAND          ""
+    CONFIGURE_COMMAND       ""
+    BUILD_COMMAND           ""
+    INSTALL_COMMAND         ""
+)
+ExternalProject_Get_property(http-parser SOURCE_DIR)
+set(HTTP_PARSER_SOURCE_DIR ${SOURCE_DIR})
+
 
 ExternalProject_Add (libuv_test
     PREFIX              ${LIBRARIES_PREFIX}/libuv_test
-    DEPENDS             libuv
+    DEPENDS             libuv http-parser
     SOURCE_DIR          ${PROJECT_SOURCE_DIR}/../
     CMAKE_CACHE_ARGS    -DCMAKE_PREFIX_PATH:STRING="${LIBRARIES_INSTALL_PREFIX}/libuv;"
+                        -DHTTP_PARSER_SOURCE_DIR:PATH=${HTTP_PARSER_SOURCE_DIR}
     BUILD_ALWAYS        TRUE
     INSTALL_COMMAND     ""
 )

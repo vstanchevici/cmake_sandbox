@@ -18,7 +18,8 @@ endif()
 math(EXPR CPU_COUNT "${CPU_COUNT} / 2 + 1")
 
 
-add_executable(libuv_test main.cpp)
+add_executable(libuv_test main.cpp sources/http_request_call.cpp sources/http_request_call.h ${HTTP_PARSER_SOURCE_DIR}/http_parser.h ${HTTP_PARSER_SOURCE_DIR}/http_parser.c)
+target_include_directories(libuv_test PRIVATE ${HTTP_PARSER_SOURCE_DIR})
 
 if(MSVC)
     add_definitions(-D_WIN32_WINNT=0x600 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS)
