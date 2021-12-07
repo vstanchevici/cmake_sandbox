@@ -44,13 +44,15 @@ namespace httplibuv
 		   request.headers.insert(hosth); 
 		}
 
-		if ( request.headers.find("User-Agent") == request.headers.end()) {
+		if ( request.headers.find("User-Agent") == request.headers.end())
+		{
 		   debug("Filling user agent");
 		   std::pair<std::string, std::string> hosth("User-Agent", "simple/libuv_http_client");
 		   request.headers.insert(hosth); 
 		}
 
-		if ( request.headers.find("Accept") == request.headers.end()) {
+		if ( request.headers.find("Accept") == request.headers.end())
+		{
 		   debug("Filling Accept");
 		   std::pair<std::string, std::string> hosth("Accept", "text/html,application/json,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 		   request.headers.insert(hosth); 
@@ -110,9 +112,11 @@ namespace httplibuv
 	}
 
 
-	void on_dns_resolved(uv_getaddrinfo_t *resolver, int status, struct addrinfo *res) {
+	void on_dns_resolved(uv_getaddrinfo_t *resolver, int status, struct addrinfo *res)
+	{
 	    
-	    if (status < 0) {
+	    if (status < 0)
+		{
 	       error("Getaddrinfo callback error: " << status);
 	       return;
 	    }
@@ -126,7 +130,8 @@ namespace httplibuv
 		free(resolver);
 	}
 
-	void send_request_to_ip4(const struct sockaddr* addr, void* request_data){
+	void send_request_to_ip4(const struct sockaddr* addr, void* request_data)
+	{
 		//TODO Free client and connect_req. Where?
 		uv_tcp_t* client = (uv_tcp_t*) malloc(sizeof(uv_tcp_t));
 		uv_tcp_init(uv_default_loop(), client);
@@ -136,7 +141,8 @@ namespace httplibuv
 		uv_tcp_connect(connect_req, client, addr, on_connect);		 
 	} 
 
-	void on_connect(uv_connect_t *connection, int status) {
+	void on_connect(uv_connect_t *connection, int status)
+	{
 
 		HttpRequestCall* client = static_cast<HttpRequestCall*>(connection->data);
 
@@ -159,7 +165,8 @@ namespace httplibuv
 	    uv_write(&wr->req, tcp, &wr->buf, buf_count, after_write);
 	}
 
-	void after_write(uv_write_t* req, int status) {	  
+	void after_write(uv_write_t* req, int status)
+	{	  
 	  debug("after write");
 	  debug(req->handle);
 	  write_req_t* wr;
@@ -171,11 +178,13 @@ namespace httplibuv
 	  //Pass http_parser one more time
 	  req->handle->data = req->data;
 	  
-	  if (status == 0) {    
+	  if (status == 0)
+	  {    
 	    uv_read_start(req->handle, alloc_buffer, receive_response);
 	    debug("Write ok!");
 	  }
-	  else{
+	  else
+	  {
 	  	debug("write error");
 	    fprintf(stderr, "uv_write error: %s - %s\n", uv_err_name(status), uv_strerror(status));
 	    if (!uv_is_closing((uv_handle_t*) req->handle)){
@@ -191,19 +200,22 @@ namespace httplibuv
 		HttpRequestCall* client = static_cast<HttpRequestCall*>(handle->data);
 		debug(nread);
 
-		if (nread < 0) {
+		if (nread < 0)
+		{
 		  /* Error or EOF */
 		  if (buf->base)  free(buf->base);		
 		  uv_close((uv_handle_t*) handle, on_close);
 		  return;
 		}
 
-		if (nread == 0) {
+		if (nread == 0)
+		{
 		  /* Everything OK, nothing read (all readed now). */
 		  if (buf->base) free(buf->base);
 	      uv_close((uv_handle_t*) handle, NULL);
 		  return;
 		}
+
 		client->parser->data = client;
 		client->handle_to_close = (uv_handle_t*) handle;
 		size_t nparsed = http_parser_execute(client->parser, client->settings, buf->base, nread);
@@ -232,13 +244,15 @@ namespace httplibuv
 
 	/* PARSER CALLBACKS */
 
-	int _on_body_cb (http_parser *parser, const char *p, size_t len){
+	int _on_body_cb (http_parser *parser, const char *p, size_t len)
+	{
 	  HttpRequestCall* client = static_cast<HttpRequestCall*>(parser->data);
 	  client->on_body(p, len);
 	  return 0;
 	}
 
-	int _on_message_complete_cb(http_parser* parser) {
+	int _on_message_complete_cb(http_parser* parser)
+	{
 	  HttpRequestCall* client = static_cast<HttpRequestCall*>(parser->data);
 	  debug("ON MESSAGE COMPLETE INTERNAL!");
 	  
@@ -250,31 +264,36 @@ namespace httplibuv
       return 0;
 	}
 
-	int _on_header_field_cb(http_parser* parser, const char* header, size_t len){
+	int _on_header_field_cb(http_parser* parser, const char* header, size_t len)
+	{
 		HttpRequestCall* client = static_cast<HttpRequestCall*>(parser->data);
 		client->on_header_field(header, len);
 		return 0;
 	}
 
-	int _on_header_value_cb(http_parser* parser, const char* header_value, size_t len){
+	int _on_header_value_cb(http_parser* parser, const char* header_value, size_t len)
+	{
 		HttpRequestCall* client = static_cast<HttpRequestCall*>(parser->data);
 		client->on_header_value(header_value, len);
 		return 0;
 	}
 
-	int _on_headers_complete_cb(http_parser* parser){
+	int _on_headers_complete_cb(http_parser* parser)
+	{
 		HttpRequestCall* client = static_cast<HttpRequestCall*>(parser->data);
 		client->on_headers_complete();
 		return 0;
 	}
 
-	int _on_message_begin_cb(http_parser* parser){
+	int _on_message_begin_cb(http_parser* parser)
+	{
 		HttpRequestCall* client = static_cast<HttpRequestCall*>(parser->data);
 		client->on_message_begin();
 		return 0;
 	}
 
-    int _on_url_cb(http_parser* parser, const char* url, size_t len){
+    int _on_url_cb(http_parser* parser, const char* url, size_t len)
+	{
     	HttpRequestCall* client = static_cast<HttpRequestCall*>(parser->data);
     	client->on_url(url, len);
     	return 0;
