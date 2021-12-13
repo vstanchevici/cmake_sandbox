@@ -10,3 +10,9 @@ https://kubasejdak.com/how-to-cross-compile-for-embedded-with-cmake-like-a-champ
 https://caiorss.github.io/C-Cpp-Notes/resources-executable.html
 
 https://vector-of-bool.github.io/2017/01/21/cmrc.html
+
+https://stackoverflow.com/questions/9998679/is-it-possible-to-add-post-install-commands-to-top-level-makefile-generated-by-c
+
+https://dane-bulat.medium.com/cmake-how-to-inspect-and-configure-the-compiler-877e6cb0317f
+
+https://vicrucann.github.io/tutorials/quick-cmake-doxygen/
