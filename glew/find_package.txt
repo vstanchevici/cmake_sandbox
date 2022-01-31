@@ -1,0 +1,5 @@
+find_package(GLFW3 REQUIRED)
+target_include_directories(${PROJECT_NAME} PRIVATE ${GLFW3_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${GLFW3_LIBRARY})
+#message(STATUS "GLFW3_INCLUDE_DIR: ${GLFW3_INCLUDE_DIR}")
+#message(STATUS "GLFW3_LIBRARY: ${GLFW3_LIBRARY}")
