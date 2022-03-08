@@ -1,7 +1,14 @@
 #include <plog/Log.h>
 #include <plog/Init.h>
 #include <plog/Formatters/TxtFormatter.h>
+#include <plog/Formatters/FuncMessageFormatter.h>
+#include <plog/Formatters/MessageOnlyFormatter.h>
+#include <plog/Formatters/CsvFormatter.h>
 #include <plog/Appenders/ColorConsoleAppender.h>
+#include <plog/Appenders/ConsoleAppender.h>
+#include <plog/Appenders/DebugOutputAppender.h>
+#include <plog/Appenders/RollingFileAppender.h>
+#include "MemoryBufferAppender.h"
 
 /*
 https://www.humio.com/glossary/logging-levels/
@@ -31,19 +38,26 @@ Some systems also rely on one of the following catch-all categories, which may s
 
 int main()
 {
+    std::string buffer;
     static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
     plog::init(plog::verbose, &consoleAppender);
 
+    for(int i = 0; i < 5; ++i)
+    {
 
-    // Log severity levels are printed in different colors.
-    PLOG_NONE << "This is a NONE message";
-    PLOG_VERBOSE << "This is a VERBOSE message";
-    PLOG_DEBUG << "This is a DEBUG message";
-    PLOG_INFO << "This is an INFO message ";
-    PLOG_WARNING << "This is a WARNING message";
-    PLOG_ERROR << "This is an ERROR message";
-    PLOG_FATAL << "This is a FATAL message";
-    
+        // Log severity levels are printed in different colors.
+        PLOG_NONE << "This is a NONE message = " << i;
+        PLOG_VERBOSE << "This is a VERBOSE message";
+        PLOG_DEBUG << "This is a DEBUG message";
+        PLOG_INFO << "This is an INFO message ";
+        PLOG_WARNING << "This is a WARNING message";
+        PLOG_ERROR << "This is an ERROR message";
+        PLOG_FATAL << "This is a FATAL message";
+    }
+
+    std::cout << buffer;
+
+    std::cout << std::endl;
 
     return 0;
 }
