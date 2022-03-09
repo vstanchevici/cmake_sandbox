@@ -12,7 +12,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 add_executable(ffmpeg_test src/dshow_capture_video.c)
 
-find_package(ffmpeg COMPONENTS avcodec avdevice avfilter avformat avutil swscale swresample REQUIRED)
+find_package(FFMPEG COMPONENTS avcodec avdevice avfilter avformat avutil swscale swresample REQUIRED)
 message(STATUS ${FFMPEG_LIBRARIES})
 
 set(PLATFORM_LIBS mfplat.lib mfuuid.lib Strmiids.lib Bcrypt.lib ws2_32.lib secur32.lib vfw32.lib shlwapi.lib)

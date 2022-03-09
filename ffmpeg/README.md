@@ -14,15 +14,12 @@ export PATH="/C/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/To
 
 ./configure --target-os=win64 --arch=x86_64 --toolchain=clang --ar=llvm-ar --ranlib=llvm-ranlib --disable-x86asm --prefix=/d/projects/ffmpeg-install/
 
-./configure --arch=x86_64 --target-os=mingw32 --cross-prefix=x86_64-w64-mingw32-
-
 
 ../make/make.exe
 
                --enable-asm 
                --enable-yasm
 ./configure --toolchain=msvc --enable-swscale --disable-x86asm --target-os=win64 --arch=x86_64 --disable-shared --enable-static --disable-doc --disable-programs --enable-w32threads 
-
 
 ./configure --cc="C:\Program Files\LLVM\bin\clang.exe" --ar="C:\Program Files\LLVM\bin\llvm-ar.exe" --strip="C:\Program Files\LLVM\bin\llvm-strip.exe" --ranlib="C:\Program Files\LLVM\bin\llvm-ranlib.exe" --nm="C:\Program Files\LLVM\bin\llvm-nm.exe" --as="C:\Program Files\NASM\nasm.exe" --target-os=win64 --arch=x86_64 --disable-shared --enable-static --disable-doc --disable-programs --enable-w32threads
 
