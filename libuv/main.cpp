@@ -16,10 +16,14 @@ int hello_world_libuv()
     return 0;
 }
 
+#include <functional>
+
+typedef std::function<void(int)> fn;
+
 class HttpRequest : public httplibuv::HttpRequestCall
 {
     public:
-        HttpRequest(int chunk_size = 0) : HttpRequestCall(chunk_size) {}
+        HttpRequest(int chunk_size = 0) : HttpRequestCall(chunk_size), message_complete{} {}
         //You can also override the following methods
         /*
           virtual void on_body(const char *p, size_t len);
@@ -33,8 +37,38 @@ class HttpRequest : public httplibuv::HttpRequestCall
         {
             std::cout << this->response_buffer << std::endl;
         };
+
+        fn message_complete;
+        inline void on_message_complete2(fn f)
+        {
+            message_complete = f;// f(10, "car");
+        }
+        
+        void call()
+        {
+            message_complete(10);
+        }
 };
 
+class SomeResource
+{
+    private:
+        int k;
+
+    public:
+        void method()
+        {
+            HttpRequest hr;
+
+            k = 324;
+            hr.on_message_complete2([this](int mode)
+            {
+                printf("mode=%d, k=%d\n", mode, this->k);
+            });
+
+            hr.call();
+        }
+};
 
 int main(int argc, char** argv)
 {
@@ -52,5 +86,10 @@ int main(int argc, char** argv)
     httplibuv::Method method1("GET", "ftp://login:pass@serv.example.com:21/function/reg.php;type=i#st"); 
     httplibuv::Method method2("GET", "https://www.youtube.com:443/watch?v=Zs4tjbqyVaM&ab_channel=RetinalFetishStudios");
     httplibuv::Method method3("GET", "https://127.0.0.1:443");
+
+    SomeResource a;
+    a.method();
+
+    getchar();
     return 0;
 }
