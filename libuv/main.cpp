@@ -3,6 +3,14 @@
 #include <uv.h>
 #include "sources/http_request_call.h"
 
+void wait_for_enter()
+{
+    do
+    {
+        std::cout << '\n' << "Press the Enter key to continue.";
+    } while (std::cin.get() != '\n');
+}
+
 int hello_world_libuv()
 {
     uv_loop_t* loop = (uv_loop_t*)malloc(sizeof(uv_loop_t));
@@ -90,6 +98,7 @@ int main(int argc, char** argv)
     SomeResource a;
     a.method();
 
-    getchar();
+    wait_for_enter();
+
     return 0;
 }
