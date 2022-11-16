@@ -58,13 +58,13 @@ ExternalProject_Add(libzip
                             -DBUILD_EXAMPLES:BOOL=OFF
                             -DBUILD_DOC:BOOL=OFF
                             -DBUILD_SHARED_LIBS:BOOL=OFF
-    CMAKE_CACHE_ARGS        -DCMAKE_INSTALL_PREFIX=${LIBRARIES_INSTALL_PREFIX}/libzip
+    CMAKE_CACHE_ARGS        -DCMAKE_INSTALL_PREFIX:STRING=${LIBRARIES_INSTALL_PREFIX}/libzip
                             -DCMAKE_PREFIX_PATH:STRING=${LIBRARIES_INSTALL_PREFIX}/zlib
 )
 
 ExternalProject_Add (zlib_test
     PREFIX              ${LIBRARIES_PREFIX}/zlib_test
-    DEPENDS             zlib libzip
+    DEPENDS             libzip
     SOURCE_DIR          ${PROJECT_SOURCE_DIR}/../
     BUILD_ALWAYS        TRUE
     INSTALL_COMMAND     ""
