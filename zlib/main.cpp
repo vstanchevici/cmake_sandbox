@@ -25,7 +25,7 @@ int wait_for_enter()
 int main(int argc, char** argv)
 {
     gvrzip::GVRZip gvrzip;
-    gvrzip.Decompress("D:\\projects\\cmake_sandbox\\zlib\\main_menu.zip");
+    gvrzip.Decompress("D:\\projects\\main_menu.zip");
 
     return wait_for_enter();
 }

@@ -68,6 +68,6 @@ ExternalProject_Add (zlib_test
     SOURCE_DIR          ${PROJECT_SOURCE_DIR}/../
     BUILD_ALWAYS        TRUE
     INSTALL_COMMAND     ""
-    CMAKE_CACHE_ARGS    -DCMAKE_PREFIX_PATH:STRING=${LIBRARIES_INSTALL_PREFIX}/zlib
-                        -DCMAKE_PREFIX_PATH:STRING=${LIBRARIES_INSTALL_PREFIX}/libzip
+    CMAKE_CACHE_ARGS    -DCMAKE_PREFIX_PATH:STRING= ${LIBRARIES_INSTALL_PREFIX}/zlib
+                                                    ${LIBRARIES_INSTALL_PREFIX}/libzip
 )
