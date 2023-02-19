@@ -8,6 +8,9 @@
 # Set CMake version
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
+# Set policies
+cmake_policy(SET CMP0114 NEW)
+
 #
 # Configure CMake environment
 #

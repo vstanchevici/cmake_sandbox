@@ -3,7 +3,7 @@
 #include <boost/url/parse.hpp>
 #include <iostream>
 
-void HttpClient::Open(std::string& url)
+void HttpClient::Open(const std::string& url)
 {
     auto res = boost::urls::parse_uri(url);
 
@@ -11,11 +11,11 @@ void HttpClient::Open(std::string& url)
     {
         boost::urls::url_view uv = res.value();
 
-        //std::cout << uv.scheme() << std::endl;
-        //std::cout << uv.host_name() << std::endl;
-        //std::cout << uv.port_number() << std::endl;
-        //std::cout << uv.encoded_path() << std::endl;
-        //std::cout << uv.encoded_fragment() << std::endl;
+        std::cout << uv.scheme() << std::endl;
+        std::cout << uv.host_name() << std::endl;
+        std::cout << uv.port_number() << std::endl;
+        std::cout << uv.encoded_path() << std::endl;
+        std::cout << uv.encoded_fragment() << std::endl;
 
         /*
         for (auto& param : uv.params())

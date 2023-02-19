@@ -34,6 +34,7 @@ using string_view = urls::string_view;
 
 #include <boost/beast.hpp>
 #include <boost/beast/ssl.hpp>
+#include <boost/asio/strand.hpp>
 
 namespace beast = boost::beast; 
 namespace http = beast::http;
@@ -67,11 +68,10 @@ class HttpClient: public std::enable_shared_from_this<HttpClient>
         void fail(beast::error_code ec, char const* what);
 
     public:
-
-        explicit HttpClient(net::any_io_executor ex, ssl::context& ctx) : resolver_(ex), stream_(ex, ctx) {}
+        explicit HttpClient(net::any_io_executor ex, ssl::context& ctx) : resolver_(ex), stream_(ex, ctx){}
         inline ~HttpClient() {}
 
-        void Open(std::string& url);
+        void Open(const std::string& url);
         void Send();
         void Send(std::string& data);
         void Send(void* data, size_t size);

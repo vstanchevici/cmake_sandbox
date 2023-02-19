@@ -199,7 +199,7 @@ public:
 
 //------------------------------------------------------------------------------
 
-int main(int argc, char** argv)
+int main1(int argc, char** argv)
 {
     // Check command line arguments.
     if(argc != 4 && argc != 5)

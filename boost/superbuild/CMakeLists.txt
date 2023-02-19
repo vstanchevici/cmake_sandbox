@@ -9,6 +9,9 @@
 # Set CMake version
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
+# Set policies
+cmake_policy(SET CMP0114 NEW)
+
 # Set paths
 
 if(NOT DEFINED LIBRARIES_PREFIX)
@@ -115,6 +118,8 @@ if(WIN32)
     endif()
 
     set(openssl_make set cl=/MP & nmake)
+
+    ExternalProject_Add_Step(perl_strawberry DEPENDERS openssl)
 elseif(UNIX)
     set(openssl_config ./config)
     set(openssl_make make -j ${CPU_COUNT})
@@ -122,7 +127,6 @@ endif()
 
 ExternalProject_Add(openssl
     PREFIX                  ${LIBRARIES_PREFIX}/openssl
-    DEPENDS                 perl_strawberry
     GIT_REPOSITORY          https://github.com/openssl/openssl.git
     GIT_TAG                 openssl-3.0.7 
     GIT_SHALLOW             YES

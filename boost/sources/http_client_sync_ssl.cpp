@@ -60,7 +60,7 @@ int url(int argc, char** argv)
     std::cout << uv.encoded_path() << std::endl;
     std::cout << uv.encoded_fragment() << std::endl;
 
-    for (auto& param : uv.params())
+    for (const auto& param : uv.params())
         std::cout << param.key << " : " << param.value << std::endl;
 
     return 0;
