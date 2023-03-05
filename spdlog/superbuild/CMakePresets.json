@@ -1,0 +1,58 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "Clang",
+      "generator": "Unix Makefiles",
+      "hidden": true,
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      }
+    },
+    {
+      "name": "Release",
+      "hidden": true,
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    },
+    {
+      "name": "MinSizeRel",
+      "hidden": true,
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "MinSizeRel" }
+    },
+    {
+      "name": "RelWithDebInfo",
+      "hidden": true,
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "RelWithDebInfo" }
+    },
+    {
+      "name": "Debug",
+      "hidden": true,
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "Clang Release",
+      "binaryDir": "${sourceDir}/../build/um-clang-release",
+      "cacheVariables": { "CMAKE_INSTALL_PREFIX": "${sourceDir}/../build/um-clang-release/install/${presetName}" },
+      "inherits": [ "Clang", "Release" ]
+    },
+    {
+      "name": "Clang MinSizeRel",
+      "binaryDir": "${sourceDir}/../build/um-clang-minsizerel",
+      "cacheVariables": { "CMAKE_INSTALL_PREFIX": "${sourceDir}/../build/um-clang-minsizerel/install/${presetName}" },
+      "inherits": [ "Clang", "MinSizeRel" ]
+    },
+    {
+      "name": "Clang RelWithDebInfo",
+      "binaryDir": "${sourceDir}/../build/um-clang-relwithdebinfo",
+      "cacheVariables": { "CMAKE_INSTALL_PREFIX": "${sourceDir}/../build/um-clang-relwithdebinfo/install/${presetName}" },
+      "inherits": [ "Clang", "RelWithDebInfo" ]
+    },
+    {
+      "name": "Clang Debug",
+      "binaryDir": "${sourceDir}/../build/um-clang-debug",
+      "cacheVariables": { "CMAKE_INSTALL_PREFIX": "${sourceDir}/../build/um-clang-debug/install/${presetName}" },
+      "inherits": [ "Clang", "Debug" ]
+    }
+  ]
+}
